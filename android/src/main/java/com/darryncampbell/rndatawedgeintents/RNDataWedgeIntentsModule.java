@@ -2,7 +2,7 @@ package com.darryncampbell.rndatawedgeintents;
 
 import android.content.Intent;
 import android.content.ComponentName;
-import android.content.Context;
+import android.content.ContextCompat;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
