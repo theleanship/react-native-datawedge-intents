@@ -2,6 +2,7 @@ package com.darryncampbell.rndatawedgeintents;
 
 import android.content.Intent;
 import android.content.ComponentName;
+import android.content.pm.PackageManager;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
@@ -105,7 +106,7 @@ public class RNDataWedgeIntentsModule extends ReactContextBaseJavaModule impleme
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_ENUMERATEDLISET);
-        reactContext.registerReceiver(myEnumerateScannersBroadcastReceiver, filter, RECEIVER_EXPORTED);
+        reactContext.registerReceiver(myEnumerateScannersBroadcastReceiver, filter, PackageManager.RECEIVER_EXPORTED);
 	    if (this.registeredAction != null)
           registerReceiver(this.registeredAction, this.registeredCategory);
           
@@ -357,7 +358,7 @@ public class RNDataWedgeIntentsModule extends ReactContextBaseJavaModule impleme
         filter.addAction(action);
         if (category != null && category.length() > 0)
           filter.addCategory(category);
-        this.reactContext.registerReceiver(scannedDataBroadcastReceiver, filter, RECEIVER_EXPORTED);
+        this.reactContext.registerReceiver(scannedDataBroadcastReceiver, filter, PackageManager.RECEIVER_EXPORTED);
     }
 
     @ReactMethod
@@ -389,7 +390,7 @@ public class RNDataWedgeIntentsModule extends ReactContextBaseJavaModule impleme
                 }
             }
         }
-        this.reactContext.registerReceiver(genericReceiver, filter, RECEIVER_EXPORTED);
+        this.reactContext.registerReceiver(genericReceiver, filter, PackageManager.RECEIVER_EXPORTED);
     }
 
     private void unregisterReceivers() {
