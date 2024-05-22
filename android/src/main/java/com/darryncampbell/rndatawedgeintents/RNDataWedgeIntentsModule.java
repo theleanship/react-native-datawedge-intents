@@ -104,7 +104,8 @@ public class RNDataWedgeIntentsModule extends ReactContextBaseJavaModule impleme
 
         IntentFilter filter = new IntentFilter();
         filter.addAction(ACTION_ENUMERATEDLISET);
-        reactContext.registerReceiver(myEnumerateScannersBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
+        compatRegisterReceiver(reactContext, myEnumerateScannersBroadcastReceiver, filter, true);
+        
 	    if (this.registeredAction != null)
           registerReceiver(this.registeredAction, this.registeredCategory);
           
@@ -356,7 +357,7 @@ public class RNDataWedgeIntentsModule extends ReactContextBaseJavaModule impleme
         filter.addAction(action);
         if (category != null && category.length() > 0)
           filter.addCategory(category);
-        this.reactContext.registerReceiver(scannedDataBroadcastReceiver, filter, Context.RECEIVER_EXPORTED);
+        compatRegisterReceiver(reactContext, scannedDataBroadcastReceiver, filter, true);
     }
 
     @ReactMethod
@@ -388,7 +389,7 @@ public class RNDataWedgeIntentsModule extends ReactContextBaseJavaModule impleme
                 }
             }
         }
-        this.reactContext.registerReceiver(genericReceiver, filter, Context.RECEIVER_EXPORTED);
+        compatRegisterReceiver(reactContext, genericReceiver, filter, true);
     }
 
     private void unregisterReceivers() {
@@ -506,4 +507,21 @@ public class RNDataWedgeIntentsModule extends ReactContextBaseJavaModule impleme
           sendEvent(this.reactContext, "barcode_scan", scanData);
       }
     }
+
+    /**
+   * Starting with Android 14, apps and services that target Android 14 and use context-registered
+   * receivers are required to specify a flag to indicate whether or not the receiver should be
+   * exported to all other apps on the device: either RECEIVER_EXPORTED or RECEIVER_NOT_EXPORTED
+   *
+   * <p>https://developer.android.com/about/versions/14/behavior-changes-14#runtime-receivers-exported
+   */
+  private void compatRegisterReceiver(
+      Context context, BroadcastReceiver receiver, IntentFilter filter, boolean exported) {
+    if (Build.VERSION.SDK_INT >= 34 && context.getApplicationInfo().targetSdkVersion >= 34) {
+      context.registerReceiver(
+          receiver, filter, exported ? Context.RECEIVER_EXPORTED : Context.RECEIVER_NOT_EXPORTED);
+    } else {
+      context.registerReceiver(receiver, filter);
+    }
+  }
 }
