@@ -5,9 +5,11 @@ import android.content.ComponentName;
 import android.provider.CalendarContract;
 import android.provider.CalendarContract.Calendars;
 import android.provider.CalendarContract.Events;
+import android.os.Build;
 import android.util.Log;
 import android.net.Uri;
 
+import android.content.Context;
 import android.content.BroadcastReceiver;
 import android.content.IntentFilter;
 import android.os.Bundle;
